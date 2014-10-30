@@ -11,7 +11,7 @@ namespace JackScottAU.WebApiSample.Models
 
         public string Name { get; set; }
 
-        public ICollection<Actor> Actors { get; set; }
+        public virtual ICollection<Actor> Actors { get; set; }
 
         public Movie()
         {

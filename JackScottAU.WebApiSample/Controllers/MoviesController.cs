@@ -19,7 +19,7 @@ namespace JackScottAU.WebApiSample.Controllers
         /// <returns></returns>
         public IEnumerable<MovieDTO> Get()
         {
-            return _db.Movies.Select(x => new MovieDTO(x)).ToList();
+            return _db.Movies.ToList().Select(x => new MovieDTO(x)).ToList();
         }
 
         /// <summary>
@@ -45,7 +45,9 @@ namespace JackScottAU.WebApiSample.Controllers
         {
             Movie dbMovie = new Movie();
             dbMovie.Name = value.Name;
-            dbMovie.Actors = _db.Actors.Where(x => value.Actors.Contains(x.ID)).ToList();
+
+            if(value.Actors != null && value.Actors.Length > 0)
+                dbMovie.Actors = _db.Actors.Where(x => value.Actors.Contains(x.ID)).ToList();
 
             _db.Movies.Add(dbMovie);
             _db.SaveChanges();
@@ -66,7 +68,8 @@ namespace JackScottAU.WebApiSample.Controllers
             movie.Name = value.Name;
 
             movie.Actors.Clear();
-            movie.Actors = _db.Actors.Where(x => value.Actors.Contains(x.ID)).ToList();
+            if (value.Actors != null && value.Actors.Length > 0)
+                movie.Actors = _db.Actors.Where(x => value.Actors.Contains(x.ID)).ToList();
 
             _db.SaveChanges();
         }
@@ -84,6 +87,11 @@ namespace JackScottAU.WebApiSample.Controllers
 
             _db.Movies.Remove(toDelete);
             _db.SaveChanges();
+        }
+
+        private MovieDTO ConvertToDTO(Movie movie)
+        {
+            return new MovieDTO(movie);
         }
     }
 }

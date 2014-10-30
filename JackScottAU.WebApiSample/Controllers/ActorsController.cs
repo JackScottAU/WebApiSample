@@ -19,7 +19,7 @@ namespace JackScottAU.WebApiSample.Controllers
         /// <returns></returns>
         public IEnumerable<ActorDTO> Get()
         {
-            return _db.Actors.Select(x => new ActorDTO(x)).ToList();
+            return _db.Actors.ToList().Select(x => new ActorDTO(x)).ToList();
         }
 
         /// <summary>
@@ -86,6 +86,11 @@ namespace JackScottAU.WebApiSample.Controllers
 
             _db.Actors.Remove(toDelete);
             _db.SaveChanges();
+        }
+
+        private ActorDTO ConvertToDTO(Actor actor)
+        {
+            return new ActorDTO(actor);
         }
     }
 }
